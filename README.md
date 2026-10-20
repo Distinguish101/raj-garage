@@ -1,0 +1,61 @@
+# Redline Garage
+
+A 3D car configurator in the browser. Pick a sports, hyper or rally car, then change the paint
+colour and finish, rims, rim size and finish, brake calipers, body kit, livery, window tint, ride
+height and camber. Builds can be saved to a garage in your browser.
+
+Built with [three.js](https://threejs.org) 0.147. No build step: the whole page is one HTML file.
+
+## Run it locally
+
+Needs [Node.js](https://nodejs.org). From this folder:
+
+    npm start
+
+then open http://localhost:5179. Opening the HTML file directly won't load the detailed cars,
+because browsers block file loads from `file://` pages.
+
+`serve.js` sends a content security policy close to the one Claude artifacts use, so anything
+the hosted page would block also fails locally.
+
+## Files
+
+| Path | What it is |
+|---|---|
+| `redline-garage.html` | The whole page: HTML, CSS and JavaScript. It has no `<html>` wrapper because the artifact host adds one; `serve.js` adds it for local runs. |
+| `models/carconcept/` | The Concept 04 model, as JSON plus base64 geometry, with its textures. |
+| `models/cars/*.b64.txt` | The other detailed cars: Draco-compressed GLB files stored as base64 text, because the artifact host doesn't serve `.glb`. |
+| `models/draco/draco_decoder.js` | three.js's Draco decoder (JavaScript build). |
+| `tools/compress.mjs` | Shrinks downloaded `.glb` cars into `models/cars/`: simplifies meshes, resizes textures to 1024 px WebP, compresses with Draco. |
+| `new-cars/` | Put downloaded `.glb` models here before compressing. The originals aren't committed. |
+
+## Adding a car
+
+1. Download the model as glTF Binary (`.glb`) into `new-cars/`.
+2. Add it to `CARS` in `tools/compress.mjs` and run `npm install`, then `node tools/compress.mjs <id>`.
+3. Add an entry to `GLB` in `redline-garage.html` with patterns for its paint, glass, tyre, caliper
+   and light material names, then a `BODIES` and `DEF` entry and a place in `CLASSES`.
+   Wheels are found automatically from the tyres' positions.
+
+## Credits
+
+All car models are by their authors and used under the licences below. They have been simplified,
+compressed and recoloured at runtime.
+
+| Car | Model | Author | Licence |
+|---|---|---|---|
+| Concept 04 | [Car Concept](https://github.com/KhronosGroup/glTF-Sample-Assets/tree/main/Models/CarConcept) | Eric Chadwick, Darmstadt Graphics Group GmbH (2024), from a public-domain car by Unity Fan | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (Khronos and 3DCommerce logo textures removed) |
+| Toyota GR Supra | [Toyota GR Supra](https://sketchfab.com/3d-models/toyota-gr-supra-9231f2d5e71a43dd87603dc0b339d99d) | thelightning | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| Nissan Skyline GT-R R34 | [GTR-r34](https://sketchfab.com/3d-models/gtr-r34-f040d64eefbb41fc9766aef2fd1f0f0a) | ARjun.JS | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| BMW M3 E30 | [[FREE] BMW M3 E30](https://sketchfab.com/3d-models/free-bmw-m3-e30-ac3c7013434e403e8faff87948caf422) | Martin Trafas | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| Koenigsegg Jesko Absolut | [2021 Koenigsegg Jesko Absolut](https://sketchfab.com/3d-models/2021-koenigsegg-jesko-absolut-f93822254a23482e9113df079b6d6475) | Ddiaz Design | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| Pagani Huayra R | [Pagani Huayra R](https://sketchfab.com/3d-models/pagani-huayra-r-1dd0905daca245cb865a9e5affd61e4b) | kevin (ケビン) | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| Apollo Project EVO | [2022 Apollo Project Evo](https://sketchfab.com/3d-models/2022-apollo-project-evo-fd92ce955d6341e89143c564cc09ed14) | Ddiaz Design | [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/): non-commercial use only |
+| RAM 1500 TRX | [2021 Ram 1500 TRX](https://sketchfab.com/3d-models/2021-ram-1500-trx-372fbf37230c46eca1997841bfaf0758) | Ddiaz Design | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/): non-commercial use only; adaptations shared under the same licence |
+
+Because of the Apollo and RAM licences, this project is non-commercial.
+
+Redline Garage is a fan project and is not affiliated with, sponsored or endorsed by any carmaker.
+All vehicle names, brands and designs belong to their owners and are used only to identify the
+cars. Performance figures and prices are approximate.
+

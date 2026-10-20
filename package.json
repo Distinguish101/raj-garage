@@ -1,0 +1,12 @@
+{
+  "name": "redline-garage",
+  "version": "1.0.0",
+  "private": true,
+  "description": "3D car configurator for sports, hyper and rally cars",
+  "scripts": {
+    "start": "node serve.js"
+  },
+  "devDependencies": {
+    "@gltf-transform/cli": "^4.5.1"
+  }
+}

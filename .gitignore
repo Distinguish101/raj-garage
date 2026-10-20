@@ -1,0 +1,11 @@
+node_modules/
+.DS_Store
+Thumbs.db
+
+# Original model files (contain Khronos/3DCommerce logos; not used by the page)
+models/carconcept/_original/
+
+# Compression output and scratch
+tools/out/
+new-cars/*.glb
+.claude/
